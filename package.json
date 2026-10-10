@@ -1,0 +1,15 @@
+{
+  "name": "project-agent-init",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reusable agent instructions and a project initialization skill",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "node scripts/validate.mjs",
+    "test": "node --test tests/install.test.mjs",
+    "install:skill": "node scripts/install.mjs"
+  }
+}
