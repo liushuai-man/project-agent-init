@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validateLocalLink } from "./validate-links.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const skill = join(root, "skills/project-agent-init");
@@ -15,6 +16,7 @@ assert.ok(manifest[1].length < 1200, "发现信息应保持简短");
 function validateMarkdown(directory, templates = false) {
   for (const item of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, item.name);
+    assert.ok(!item.isSymbolicLink(), `skill 不允许符号链接：${path}`);
     if (item.isDirectory()) {
       validateMarkdown(path, templates || item.name === "assets");
     } else if (item.name.endsWith(".md")) {
@@ -23,13 +25,12 @@ function validateMarkdown(directory, templates = false) {
       if (!templates)
         assert.doesNotMatch(content, /\{\{\w+\}\}/, `未替换字段：${path}`);
       for (const link of content.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
-        const target = link[1].split("#")[0];
-        if (target && !/^[a-z]+:/i.test(target)) {
-          assert.ok(
-            existsSync(join(dirname(path), target)),
-            `引用不存在：${path} -> ${target}`,
-          );
-        }
+        validateLocalLink(skill, path, link[1]);
+      }
+      for (const link of content.matchAll(
+        /^\s{0,3}\[[^\]]+\]:\s*<?([^\s>]+)>?/gm,
+      )) {
+        validateLocalLink(skill, path, link[1]);
       }
     }
   }

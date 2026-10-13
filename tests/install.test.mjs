@@ -89,3 +89,37 @@ test("CLI 无效参数失败且不写入", (t) => {
   assert.match(result.stderr, /未知参数/);
   assert.equal(existsSync(target), false);
 });
+
+test("复制失败清理本次目录，允许重试并保留相邻文件", (t) => {
+  const target = fixture(t);
+  const script = `
+    import fs from 'node:fs';
+    import { syncBuiltinESMExports } from 'node:module';
+    import { join } from 'node:path';
+    import assert from 'node:assert/strict';
+    const original = fs.cpSync;
+    fs.cpSync = (source, destination) => {
+      fs.writeFileSync(join(destination, 'partial'), 'partial');
+      throw new Error('injected copy failure');
+    };
+    syncBuiltinESMExports();
+    const { installSkill } = await import(process.argv[1]);
+    const target = process.argv[2];
+    fs.mkdirSync(target, { recursive: true });
+    fs.writeFileSync(join(target, 'keep'), 'keep');
+    assert.throws(() => installSkill({ target }), /injected copy failure/);
+    assert.equal(fs.existsSync(join(target, 'project-agent-init')), false);
+    assert.equal(fs.readFileSync(join(target, 'keep'), 'utf8'), 'keep');
+    fs.cpSync = original;
+    syncBuiltinESMExports();
+    installSkill({ target });
+  `;
+  execFileSync(process.execPath, [
+    "--input-type=module",
+    "-e",
+    script,
+    new URL("../scripts/install.mjs", import.meta.url).href,
+    target,
+  ]);
+  compareTree(skillSource, join(target, "project-agent-init"));
+});

@@ -1,6 +1,8 @@
 ---
 name: project-agent-init
 description: Initialize or adapt a repository's agent instruction system using its actual stack, commands, and boundaries. Use when asked to set up AGENTS.md, project agent rules, or migrate an existing rule system to a new project.
+metadata:
+  version: "0.1.0"
 ---
 
 # Project agent initialization
@@ -45,6 +47,9 @@ Do not create empty skill folders or import every skill from a source project.
 ## Preserve and verify
 
 For existing projects, merge narrowly and preserve project-specific decisions.
+On repeated runs, update the existing sections instead of appending parallel guides.
+If repository evidence and requirements have not changed, avoid rewriting equivalent
+instructions. Preserve unrelated README content and local customizations.
 For migration, extract reusable rules and adapt project names, integration URLs,
 release policies, and commands. When existing rules conflict, use actual repository
 configuration as evidence and ask about unresolved policy decisions.

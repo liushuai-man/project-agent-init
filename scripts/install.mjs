@@ -1,4 +1,4 @@
-import { cpSync, existsSync, lstatSync, mkdirSync } from "node:fs";
+import { cpSync, existsSync, lstatSync, mkdirSync, rmSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -34,11 +34,23 @@ export function installSkill({
   if (!dryRun) {
     mkdirSync(dirname(destination), { recursive: true });
     mkdirSync(destination);
-    cpSync(skillSource, destination, {
-      recursive: true,
-      force: false,
-      errorOnExist: true,
-    });
+    try {
+      cpSync(skillSource, destination, {
+        recursive: true,
+        force: false,
+        errorOnExist: true,
+      });
+    } catch (error) {
+      // Only remove the destination exclusively created by this invocation.
+      try {
+        rmSync(destination, { recursive: true, force: true });
+      } catch (cleanupError) {
+        throw new Error(
+          `安装失败：${error.message}；清理失败，请检查 ${destination}：${cleanupError.message}`,
+        );
+      }
+      throw error;
+    }
   }
   return destination;
 }
