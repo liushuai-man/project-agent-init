@@ -69,6 +69,8 @@ npm run update:skill -- --target "D:\mycode\my-app\.agents\skills"
 
 ## 仓库开发
 
+本仓库的 agent 开发约定见 [AGENTS.md](AGENTS.md)：开发 skill 时，每完成一个独立且通过检查的改动，就创建本地提交并推送到当前分支配置的上游；不同目的的修改分开提交，不夹带已有的无关修改。不强制推送；缺少上游或推送被拒绝时报告阻碍。这项授权仅适用于本仓库，不写入生成给其他项目的模板，也不包含发布或全局安装。
+
 skill 与模板位于 `skills/project-agent-init/`，复制整个目录即可使用。修改后运行：
 
 ```powershell
