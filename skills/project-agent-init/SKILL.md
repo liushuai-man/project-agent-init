@@ -52,8 +52,11 @@ throughout development: each independently verifiable change is a checkpoint,
 rather than accumulating unrelated work until the entire task is finished.
 Keep dependent implementation, tests, and documentation together; do not split by
 file or impose a commit count. Preserve existing approval requirements and resolve
-policy conflicts before changing them. Commit granularity does not grant permission
-to commit or push, and this repository's own authorization must not be exported.
+policy conflicts before changing them. These checkpoints are local commits only.
+Include an explicit rule that pushing requires the user's instruction or approval;
+completing a task or creating local commits must not trigger an automatic push.
+Commit granularity does not grant permission to commit, and this repository's own
+authorization must not be exported.
 
 ## Preserve and verify
 

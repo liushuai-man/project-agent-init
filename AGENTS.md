@@ -12,15 +12,17 @@ files and templates use English.
   and release rules from the target repository; never invent them.
 - Keep the installer dependency-free and refuse to overwrite an existing skill.
 - For skill development in this repository, create a local commit after each
-  independent, complete change passes the required checks, then push it to the
-  current branch's configured upstream. The user has authorized this workflow;
-  no additional confirmation is needed for routine commits and pushes.
+  independent, complete change passes the required checks. The user has authorized
+  local commits; no additional confirmation is needed for routine local commits.
+- Push to the current branch's configured upstream only when the user explicitly
+  requests or approves it. Do not automatically push after committing or finishing
+  a task.
 - Keep unrelated changes in separate commits. Stage only files or hunks belonging
   to the current task; do not include pre-existing unrelated work.
 - Never force-push. If the upstream is missing or a push is rejected, report the
   blocker without inventing a remote destination or rewriting shared history.
 - Do not publish releases or install globally unless requested. This repository's
-  commit and push authorization must not be copied into target project templates.
+  local commit authorization must not be copied into target project templates.
 - Verify with `npm run check` and `npm test` (or the equivalent Bun commands).
 - Format changed JavaScript and JSON with Biome before finishing. Markdown is
   maintained manually because Biome does not format it.

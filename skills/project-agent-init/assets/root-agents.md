@@ -29,8 +29,9 @@ README and configuration as the source of truth.
   split mechanically by file, line count, or a fixed number of commits.
 - Inspect the staged diff and include only files or hunks for the current unit;
   preserve pre-existing unrelated work. Use a message describing the change's purpose.
-- Commit authorization does not imply push authorization; follow the project's
-  separate push policy.
+- These checkpoints are local commits only. Push to a remote only when the user
+  explicitly requests or approves it; do not automatically push after a commit or
+  at task completion.
 
 ## Verified commands
 
