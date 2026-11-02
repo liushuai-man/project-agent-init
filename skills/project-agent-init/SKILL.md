@@ -44,6 +44,17 @@ Use [the workflow skill template](assets/workflow-skill.md) only for a concrete,
 recurring workflow requested by the user or demonstrated by the repository.
 Do not create empty skill folders or import every skill from a source project.
 
+## Adapt the commit workflow
+
+Include the root template's incremental commit guidance, adapting it to the target
+project's existing policy and user authorization. Prefer small, coherent commits
+throughout development: each independently verifiable change is a checkpoint,
+rather than accumulating unrelated work until the entire task is finished.
+Keep dependent implementation, tests, and documentation together; do not split by
+file or impose a commit count. Preserve existing approval requirements and resolve
+policy conflicts before changing them. Commit granularity does not grant permission
+to commit or push, and this repository's own authorization must not be exported.
+
 ## Preserve and verify
 
 For existing projects, merge narrowly and preserve project-specific decisions.
